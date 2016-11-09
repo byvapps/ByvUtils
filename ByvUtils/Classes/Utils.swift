@@ -7,3 +7,18 @@
 //
 
 import Foundation
+
+public struct Utils {
+    
+    public static func showTabBar() {
+        if let tab: UITabBarController = UIApplication.shared.windows[0].rootViewController as? UITabBarController {
+            tab.tabBar.isHidden = false
+        }
+    }
+    
+    public static func hideTabBar() {
+        if let tab: UITabBarController = UIApplication.shared.windows[0].rootViewController as? UITabBarController {
+            tab.tabBar.isHidden = true
+        }
+    }
+}
