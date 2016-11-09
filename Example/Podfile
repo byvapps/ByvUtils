@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'ByvUtils_Example' do
+  pod 'ByvUtils', :path => '../'
+
+  target 'ByvUtils_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
