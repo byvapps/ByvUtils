@@ -73,5 +73,34 @@ extension String {
         }
         return nil
     }
+    
+    // MARK: - Versions
+    
+    func isOlderThanVersion(_ version2: Any?) -> Bool {
+        if let version2 = version2 as? String {
+            let v1Comps = self.components(separatedBy: ".")
+            let v2Comps = version2.components(separatedBy: ".")
+            var count = v1Comps.count
+            if v2Comps.count > count {
+                count = v2Comps.count
+            }
+            for i in 0..<count {
+                var v1 = 0
+                if v1Comps.count > i {
+                    v1 = Int(v1Comps[i]) ?? 0
+                }
+                
+                var v2 = 0
+                if v2Comps.count > i {
+                    v2 = Int(v2Comps[i]) ?? 0
+                }
+                
+                if v1 > v2 {
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
 
