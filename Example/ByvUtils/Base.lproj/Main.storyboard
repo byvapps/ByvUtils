@@ -1,25 +1,68 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="vXZ-lx-hvc">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Example View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ExampleViewController" customModule="ByvUtils_Example" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mXC-c2-be9">
+                                <rect key="frame" x="62" y="98" width="250" height="250"/>
+                                <color key="backgroundColor" red="0.81960784310000001" green="0.81960784310000001" blue="0.81960784310000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="250" id="YmT-XO-HwV"/>
+                                    <constraint firstAttribute="width" constant="250" id="rvM-DV-EKA"/>
+                                </constraints>
+                            </imageView>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="eIy-q8-cjg">
+                                <rect key="frame" x="8" y="20" width="359" height="30"/>
+                                <nil key="textColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xBX-Ca-k5d">
+                                <rect key="frame" x="8" y="58" width="359" height="30"/>
+                                <state key="normal" title="Create QR"/>
+                                <connections>
+                                    <action selector="createQr:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="cn2-uK-J2x"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="mXC-c2-be9" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="AGV-if-fkN"/>
+                            <constraint firstItem="xBX-Ca-k5d" firstAttribute="top" secondItem="eIy-q8-cjg" secondAttribute="bottom" constant="8" id="Jav-Ym-795"/>
+                            <constraint firstItem="eIy-q8-cjg" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="8" id="MJs-i2-YQf"/>
+                            <constraint firstItem="eIy-q8-cjg" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" id="PeN-Ia-PFz"/>
+                            <constraint firstItem="xBX-Ca-k5d" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" constant="8" id="Wsc-DD-MP6"/>
+                            <constraint firstAttribute="trailing" secondItem="xBX-Ca-k5d" secondAttribute="trailing" constant="8" id="a2M-ph-X6S"/>
+                            <constraint firstItem="mXC-c2-be9" firstAttribute="top" secondItem="xBX-Ca-k5d" secondAttribute="bottom" constant="10" id="jy5-Ia-cFm"/>
+                            <constraint firstAttribute="trailing" secondItem="eIy-q8-cjg" secondAttribute="trailing" constant="8" id="v6y-mZ-4Q2"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="imageView" destination="mXC-c2-be9" id="O2Z-zg-oy3"/>
+                        <outlet property="textField" destination="eIy-q8-cjg" id="5wY-nt-3BR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="140" y="138.98050974512745"/>
         </scene>
     </scenes>
 </document>
