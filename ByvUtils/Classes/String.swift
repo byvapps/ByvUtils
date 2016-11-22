@@ -27,10 +27,10 @@ public extension String {
     
     // "Awesome".contains("me") == true
     // "Awesome".contains("Dude") == false
-    func contains(s: String) -> Bool
-    {
-        return (self.range(of: s) != nil) ? true : false
-    }
+//    func contains(_ s: String) -> Bool
+//    {
+//        return (self.range(of: s) != nil) ? true : false
+//    }
     
     // MARK: - Empty
     

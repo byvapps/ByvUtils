@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ByvUtils'
-  s.version          = '0.1.3'
+  s.version          = '0.1.4'
   s.summary          = 'Utils for B&V Apps.'
 
 # This description is used to generate tags and improve search results.
@@ -32,9 +32,9 @@ TODO: Add long description of the pod here.
 
   s.source_files = 'ByvUtils/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'ByvUtils' => ['ByvUtils/Assets/*.png']
-  # }
+  s.resource_bundles = {
+    'ByvUtils' => ['ByvUtils/ByvUtils.bundle']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'

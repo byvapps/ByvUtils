@@ -11,7 +11,7 @@ import Foundation
 // MARK: - Localization
 
 public extension URL {
-    func getQueryItemValueForKey(key: String) -> String? {
+    func getQueryItemValueForKey(_ key: String) -> String? {
         guard let components = URLComponents(url: self, resolvingAgainstBaseURL: false) else {
             return nil
         }

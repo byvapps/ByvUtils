@@ -140,6 +140,12 @@ class ExampleViewController: UIViewController {
         } else {
             print("\(v1) is Equal to \(v2)")
         }
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
 
     override func didReceiveMemoryWarning() {
