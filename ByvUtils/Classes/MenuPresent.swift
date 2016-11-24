@@ -21,6 +21,7 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
     public var onWideOpen: (() -> Void)? = nil
     
     private var preStatusBarStyle = UIApplication.shared.statusBarStyle
+    private var outViewController:UIViewController? = nil
     private var outView:UIView? = nil
     
     public override init() {
@@ -31,6 +32,11 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
     public func rotated() {
         if opened {
             print("ROTATED!!")
+            print("bounds: \(UIScreen.main.bounds)")
+            let snap = outViewController?.view.snapshotView(afterScreenUpdates: true)!
+            snap?.frame = (outView?.bounds)!
+            snap?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            outView?.addSubview(snap!)
         }
     }
     
@@ -69,7 +75,9 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
         
         menuVc.view.frame = UIScreen.main.bounds
         
-        outView = _vc.view.snapshotView(afterScreenUpdates: true)
+        outViewController = _vc
+        outView = outViewController?.view.snapshotView(afterScreenUpdates: true)
+        outView?.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin, .flexibleBottomMargin]
         outView?.frame = UIScreen.main.bounds
         self.updateOutView()
         
@@ -108,6 +116,7 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
                 return
         }
         
+        outViewController = newVc
         let snap = newVc.view.snapshotView(afterScreenUpdates: true)!
         snap.frame = (outView?.bounds)!
         snap.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -120,6 +129,7 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
             animations: {
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0, animations: {
                     self.outView?.frame = UIScreen.main.bounds
+                    newVc.view.frame = UIScreen.main.bounds
                 })
         },
             completion: { _ in
@@ -166,9 +176,6 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
         outView?.backgroundColor = UIColor.clear
         let outTap = UITapGestureRecognizer(target: self, action: #selector(tappedOut))
         outView?.addGestureRecognizer(outTap)
-//        outSwipe = UISwipeGestureRecognizer(target: self, action: #selector(tappedOut))
-//        outSwipe?.direction = .left
-//        outView?.addGestureRecognizer(outSwipe!)
         outView?.layer.shadowColor = UIColor.black.cgColor
         outView?.layer.shadowOpacity = 0.3
         outView?.layer.shadowOffset = CGSize(width: 0, height: 0)
