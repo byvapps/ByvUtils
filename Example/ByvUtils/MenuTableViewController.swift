@@ -37,18 +37,23 @@ class MenuTableViewController: UITableViewController {
     
     @IBAction func showCloseModal(_ sender: Any) {
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "modalNavVC")
-        ByvMenuNavigationViewController.sharedInstance?.showModal(vc)
+        ByvMenuNav.instance?.showModal(vc, fromMenu: self)
         
     }
     
     @IBAction func changeToCloseAsRoot(_ sender: Any) {
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "modalVC")
-        ByvMenuNavigationViewController.setRoot(vc)
+        ByvMenuNav.setRoot(viewController:vc, fromMenu: self)
     }
     
     @IBAction func changeToDefaultAsRoot(_ sender: UIButton) {
         let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "defaultVC")
-        ByvMenuNavigationViewController.setRoot(vc)
+        ByvMenuNav.setRoot(viewController:vc, fromMenu: self)
+    }
+    
+    @IBAction func changeToTran(_ sender: UIButton) {
+        let vc = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MenuSettingsVC")
+        ByvMenuNav.setRoot(viewController:vc, fromMenu: self)
     }
     
     @IBAction func close(_ sender: UIButton) {

@@ -9,14 +9,10 @@
 import Foundation
 import QuartzCore
 
-open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControllerAnimatedTransitioning, UIViewControllerTransitioningDelegate {
+open class LeftMenuTransition: ByvTransition {
     
-    public var transitionDuration:TimeInterval = 0.3
     public var menuWidthPecent:CGFloat = 0.10
-    public var menuScale:CGFloat = 0.3
-    
-    public var presenting:Bool = true
-    public var opened:Bool = false
+    public var menuScale:CGFloat = 0.9
     
     public var onWideOpen: (() -> Void)? = nil
     
@@ -24,37 +20,38 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
     private var outViewController:UIViewController? = nil
     private var outView:UIView? = nil
     
-    public override init() {
-        super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-    }
-    
-    public func rotated() {
+    override public func rotated() {
+        super.rotated()
         if opened {
             print("ROTATED!!")
             print("bounds: \(UIScreen.main.bounds)")
-            let snap = outViewController?.view.snapshotView(afterScreenUpdates: true)!
-            snap?.frame = (outView?.bounds)!
-            snap?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            outView?.addSubview(snap!)
+            if #available(iOS 10.0, *) {
+                Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { (timer) in
+                    var bounds = UIScreen.main.bounds
+                    self.outViewController?.view.frame = bounds
+                    let snap = self.outViewController?.view.snapshotView(afterScreenUpdates: true)!
+                    var frame = bounds
+                    frame.size.width *= self.menuScale
+                    frame.size.height *= self.menuScale
+                    frame.origin.y = (bounds.size.height - frame.size.height) / 2.0
+                    frame.origin.x = bounds.size.width - (bounds.size.width * self.menuWidthPecent)
+                    UIView.animate(withDuration: 0.3,
+                                   animations: {
+                                    self.outView?.frame = frame
+                    },completion: nil)
+                    
+                    snap?.frame = (self.outView?.bounds)!
+                    snap?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+                    self.outView?.addSubview(snap!)
+                })
+            } else {
+                // Fallback on earlier versions
+            }
         }
     }
     
-    public func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        self.presenting = true
-        return self
-    }
-    
-    public func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        self.presenting = false
-        return self
-    }
-    
-    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        return transitionDuration
-    }
-    
-    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    override public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+        super.animateTransition(using: transitionContext)
         if self.presenting {
             self.showMenu(withTransaction: transitionContext)
         }
@@ -105,7 +102,7 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
                     transitionContext.completeTransition(false)
                 } else {
                     self.opened = true
-                    self.prepareGestureRecognizerInView(view: self.outView!)
+                    self.wireTo(view: self.outView!)
                     transitionContext.completeTransition(true)
                 }
         })
@@ -169,7 +166,7 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
     }
     
     func tappedOut(_ sender: Any) {
-        ByvMenuNavigationViewController.closeMenu()
+        ByvMenuNav.closeLeftMenu()
     }
     
     func updateOutView() {
@@ -181,73 +178,26 @@ open class MenuTransition: UIPercentDrivenInteractiveTransition, UIViewControlle
         outView?.layer.shadowOffset = CGSize(width: 0, height: 0)
     }
     
-    public func interactionControllerForPresentation(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.interactionInProgress ? self : nil
-    }
+    // MARK: - UIPercentDrivenInteractiveTransition
     
-    public func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
-        return self.interactionInProgress ? self : nil
-    }
-    
-    var interactionInProgress = false
-    
-    private var shouldCompleteTransition = false
-    
-    public func wireToViewController(viewController: UIViewController!) {
-        prepareGestureRecognizerInView(view: viewController.view)
-    }
-    
-    private func prepareGestureRecognizerInView(view: UIView) {
+    override func prepareGestureRecognizerIn(view: UIView) {
+        super.prepareGestureRecognizerIn(view: view)
         if opened {
             let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(gestureRecognizer:)))
             view.addGestureRecognizer(gesture)
         } else {
-            let gesture = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(handleGesture(gestureRecognizer:)))
-            gesture.edges = UIRectEdge.left
+            let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleGesture(gestureRecognizer:)))
             view.addGestureRecognizer(gesture)
         }
     }
     
-    func handleGesture(gestureRecognizer: UIScreenEdgePanGestureRecognizer) {
-        
-        let translation = gestureRecognizer.translation(in: gestureRecognizer.view!.superview!)
-        var progress = (translation.x / UIScreen.main.bounds.size.width)
-        if opened {
-            progress *= -1
-        }
-        
-        progress = CGFloat(fminf(fmaxf(Float(progress), 0.0), 1.0))
-        
-        
-        switch gestureRecognizer.state {
-            
-        case .began:
-            interactionInProgress = true
-            if !opened {
-                ByvMenuNavigationViewController.showMenu()
-            } else {
-                ByvMenuNavigationViewController.closeMenu()
-            }
-            
-        case .changed:
-            shouldCompleteTransition = progress > 0.5
-            update(progress)
-            
-        case .cancelled:
-            interactionInProgress = false
-            cancel()
-            
-        case .ended:
-            interactionInProgress = false
-            
-            if !shouldCompleteTransition {
-                cancel()
-            } else {
-                finish()
-            }
-            
-        default:
-            print("Unsupported")
-        }
+    override func startTransition() {
+        super.startTransition()
+        ByvMenuNav.showLeftMenu()
+    }
+    
+    override func closeTransition() {
+        super.closeTransition()
+        ByvMenuNav.closeLeftMenu()
     }
 }
