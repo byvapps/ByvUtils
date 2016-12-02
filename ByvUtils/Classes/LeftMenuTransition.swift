@@ -16,15 +16,12 @@ open class LeftMenuTransition: ByvTransition {
     
     public var onWideOpen: (() -> Void)? = nil
     
-    private var preStatusBarStyle = UIApplication.shared.statusBarStyle
     private var outViewController:UIViewController? = nil
     private var outView:UIView? = nil
     
     override public func rotated() {
         super.rotated()
         if opened {
-            print("ROTATED!!")
-            print("bounds: \(UIScreen.main.bounds)")
             if #available(iOS 10.0, *) {
                 Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { (timer) in
                     var bounds = UIScreen.main.bounds
@@ -70,6 +67,9 @@ open class LeftMenuTransition: ByvTransition {
                 return
         }
         
+        preStatusBarStyle = UIApplication.shared.statusBarStyle
+        UIApplication.shared.statusBarStyle = newStatusBarStyle
+        
         menuVc.view.frame = UIScreen.main.bounds
         
         outViewController = _vc
@@ -99,6 +99,7 @@ open class LeftMenuTransition: ByvTransition {
             completion: { _ in
                 if transitionContext.transitionWasCancelled {
                     self.opened = false
+                    UIApplication.shared.statusBarStyle = self.preStatusBarStyle
                     transitionContext.completeTransition(false)
                 } else {
                     self.opened = true
@@ -110,7 +111,7 @@ open class LeftMenuTransition: ByvTransition {
     
     func closeMenu(withTransaction transitionContext: UIViewControllerContextTransitioning) {
         guard let newVc = transitionContext.viewController(forKey: UITransitionContextViewControllerKey.to) else {
-                return
+            return
         }
         
         outViewController = newVc
@@ -135,6 +136,7 @@ open class LeftMenuTransition: ByvTransition {
                     transitionContext.completeTransition(false)
                 } else {
                     self.opened = false
+                    UIApplication.shared.statusBarStyle = self.preStatusBarStyle
                     self.outView?.removeFromSuperview()
                     self.outView = nil
                     transitionContext.completeTransition(true)

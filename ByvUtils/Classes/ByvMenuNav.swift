@@ -8,35 +8,24 @@
 
 import UIKit
 
-open class ByvMenuNav: UINavigationController {
+public protocol ByvMenu : NSObjectProtocol {
+    func transition() -> ByvTransition
+    func loadTransition()
+}
+
+open class ByvMenuNav: UINavigationController, UINavigationControllerDelegate {
     
     static open var instance:ByvMenuNav? = nil
     
-    private var _leftTransition:ByvTransition = LeftMenuTransition()
-    open var leftTransition:ByvTransition {
-        get {
-            return _leftTransition
-        }
-        set {
-            _leftTransition = newValue
-            if _leftMenu != nil {
-                _leftMenu?.transitioningDelegate = _leftTransition
-                _leftTransition.wireTo(viewController: self)
-            }
-        }
-    }
-    
-    private var _leftMenu: UIViewController? = nil
-    open var leftMenu: UIViewController? {
+    private var _leftMenu: ByvMenu? = nil
+    open var leftMenu: ByvMenu? {
         get {
             return _leftMenu
         }
         set {
             _leftMenu = newValue
-            if _leftTransition != nil {
-                _leftMenu?.transitioningDelegate = _leftTransition
-                _leftTransition.wireTo(viewController: self)
-            }
+            leftMenu?.loadTransition()
+            self.addLeftMenuButtonTo(self.viewControllers[0])
         }
     }
     
@@ -47,38 +36,91 @@ open class ByvMenuNav: UINavigationController {
         }
         set {
             _leftMenuIdentifier = newValue
-            leftMenu = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: _leftMenuIdentifier)
+            if let menu:ByvMenu = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: _leftMenuIdentifier) as? ByvMenu {
+                leftMenu = menu
+            }
         }
     }
     
+    private var _leftMenuImage: UIImage? = nil
+    open var leftMenuImage: UIImage? {
+        get {
+            if _leftMenuImage == nil {
+                let podBundle = Bundle(for: self.classForCoder)
+                _leftMenuImage = UIImage(named: "menuButton.png", in: podBundle, compatibleWith: nil)
+            }
+            return _leftMenuImage
+        }
+        set {
+            _leftMenuImage = newValue
+            addLeftMenuButtonTo(self.viewControllers[0])
+        }
+    }
+    
+    private var _backImage: UIImage? = nil
+    open var backImage: UIImage? {
+        get {
+            if _backImage == nil {
+                let podBundle = Bundle(for: self.classForCoder)
+                _backImage = UIImage(named: "back.png", in: podBundle, compatibleWith: nil)
+            }
+            return _backImage
+        }
+        set {
+            _backImage = newValue
+        }
+    }
+    
+    public var allwaysShowLeftMenuButton = false
     
     required public init?(coder: NSCoder) {
         super.init(coder: coder)
         ByvMenuNav.instance = self
     }
+    
+    public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        if let leftMenu = leftMenu {
+            if navigationController.viewControllers.index(of: viewController) == 0 || allwaysShowLeftMenuButton {
+                addLeftMenuButtonTo(viewController)
+            }
+        }
+    }
 
     override open func viewDidLoad() {
         super.viewDidLoad()
         
+        self.delegate = self
+        
         if leftMenu == nil {
             leftMenuIdentifier = _leftMenuIdentifier
         }
-        
-        self.addLeftMenuButtonTo(self.viewControllers[0])
     }
     
     func addLeftMenuButtonTo(_ viewController: UIViewController) {
-        let podBundle = Bundle(for: self.classForCoder)
-        let url = podBundle.url(forResource: "ByvUtils", withExtension: "bundle")
-        let imageBundle = Bundle(url: url!)
-        var image = UIImage(named: "menuButton.png", in: imageBundle, compatibleWith: nil)
-        image = UIImage(named: "menuButton.png")
-        let menuBtn = UIBarButtonItem.init(image: image, style: .plain, target: self, action: #selector(showLeftMenu))
-        viewController.navigationItem.leftBarButtonItem = menuBtn
+        let menuBtn = UIBarButtonItem.init(image: leftMenuImage, style: .plain, target: self, action: #selector(showLeftMenu))
+        var buttons: Array<UIBarButtonItem> = [menuBtn]
+        
+        if let button = viewController.navigationItem.leftBarButtonItem, let target = button.target as? UIViewController, target != self {
+            buttons.insert(button, at: 0)
+        } else {
+            if let items = viewController.navigationItem.leftBarButtonItems {
+                for button in items {
+                    if let target = button.target as? UIViewController, target != self {
+                        buttons.insert(button, at: 0)
+                    }
+                }
+            }
+        }
+//        if self.viewControllers.index(of: viewController) != 0 && allwaysShowLeftMenuButton {
+//            let button = UIBarButtonItem.init(image: leftMenuImage, style: .plain, target: self, action: #selector(popViewController(animated:)))
+//            buttons.insert(button, at: 0)
+//        }
+        viewController.navigationItem.leftItemsSupplementBackButton = true
+        viewController.navigationItem.leftBarButtonItems = buttons
     }
     
     public static func closeLeftMenu() {
-        ByvMenuNav.instance?.leftMenu?.dismiss(animated: true, completion: nil)
+        (ByvMenuNav.instance?.leftMenu as? UIViewController)?.dismiss(animated: true, completion: nil)
     }
     
     public static func showLeftMenu() {
@@ -86,17 +128,17 @@ open class ByvMenuNav: UINavigationController {
     }
     
     func showLeftMenu() {
-        if let vc = leftMenu {
+        if let vc = leftMenu as? UIViewController {
             self.present(vc, animated: true, completion: nil)
         }
     }
     
-    open static func showModal(_ viewController: UIViewController, fromMenu: UIViewController?) {
+    open static func showModal(_ viewController: UIViewController, fromMenu: ByvMenu?) {
         ByvMenuNav.instance?.showModal(viewController, fromMenu:fromMenu)
     }
     
-    open func showModal(_ viewController: UIViewController, fromMenu: UIViewController?) {
-        if let menu = fromMenu {
+    open func showModal(_ viewController: UIViewController, fromMenu: ByvMenu?) {
+        if let menu = fromMenu as? UIViewController {
             menu.dismiss(animated: true, completion: {
                 self.present(viewController, animated: true, completion: nil)
             })
@@ -105,27 +147,31 @@ open class ByvMenuNav: UINavigationController {
         }
     }
     
-    open static func setRoot(viewController: UIViewController, fromMenu: UIViewController?) {
+    open static func setRoot(viewController: UIViewController, fromMenu: ByvMenu?) {
         ByvMenuNav.instance?.setRoot([viewController], fromMenu:fromMenu)
     }
     
-    open static func setRoot(viewControllers: Array<UIViewController>, fromMenu: UIViewController?) {
+    open static func setRoot(viewControllers: Array<UIViewController>, fromMenu: ByvMenu?) {
         ByvMenuNav.instance?.setRoot(viewControllers, fromMenu:fromMenu)
     }
     
-    open func setRoot(_ viewControllers: Array<UIViewController>, fromMenu: UIViewController?) {
+    open func setRoot(_ viewControllers: Array<UIViewController>, fromMenu: ByvMenu?) {
         if self.viewControllers != viewControllers {
-            if let transition:LeftMenuTransition = leftTransition as? LeftMenuTransition {
+            if let menu = fromMenu, let transition:LeftMenuTransition = menu.transition() as? LeftMenuTransition {
                 transition.onWideOpen = {
                     self.viewControllers = viewControllers
-                    self.addLeftMenuButtonTo(viewControllers[0])
+                    if fromMenu != nil && fromMenu as? UIViewController == self.leftMenu as? UIViewController {
+                        self.addLeftMenuButtonTo(self.viewControllers[0])
+                    }
                 }
             } else {
                 self.viewControllers = viewControllers
-                self.addLeftMenuButtonTo(viewControllers[0])
+                if fromMenu != nil && fromMenu as? UIViewController == self.leftMenu as? UIViewController {
+                    self.addLeftMenuButtonTo(self.viewControllers[0])
+                }
             }
         }
-         if let menu = fromMenu {
+        if let menu = fromMenu as? UIViewController {
             menu.dismiss(animated: true, completion: nil)
         }
     }

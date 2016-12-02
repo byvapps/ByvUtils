@@ -19,8 +19,7 @@ class MenuSettingsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -31,13 +30,13 @@ class MenuSettingsViewController: UIViewController {
     @IBAction func timeChanged(_ slider: UISlider) {
         let value = floor(slider.value * 10) / 10
         timelbl.text = "\(value)"
-        ByvMenuNav.instance?.leftTransition.transitionDuration = TimeInterval(value)
+        ByvMenuNav.instance?.leftMenu?.transition().transitionDuration = TimeInterval(value)
     }
     
     @IBAction func widthChanged(_ slider: UISlider) {
         let value = floor(slider.value * 100) / 100
         widthPercentageLbl.text = "\(value)"
-        if let transition:LeftMenuTransition = ByvMenuNav.instance?.leftTransition as? LeftMenuTransition {
+        if let transition:LeftMenuTransition = ByvMenuNav.instance?.leftMenu?.transition() as? LeftMenuTransition {
             transition.menuWidthPecent = CGFloat(value)
         }
     }
@@ -45,11 +44,10 @@ class MenuSettingsViewController: UIViewController {
     @IBAction func scaleChanged(_ slider: UISlider) {
         let value = floor(slider.value * 100) / 100
         scaleLbl.text = "\(value)"
-        if let transition:LeftMenuTransition = ByvMenuNav.instance?.leftTransition as? LeftMenuTransition {
+        if let transition:LeftMenuTransition = ByvMenuNav.instance?.leftMenu?.transition() as? LeftMenuTransition {
             transition.menuScale = CGFloat(value)
         }
     }
-    
 
     /*
     // MARK: - Navigation

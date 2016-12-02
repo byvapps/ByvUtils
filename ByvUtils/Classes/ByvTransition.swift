@@ -13,6 +13,9 @@ open class ByvTransition: UIPercentDrivenInteractiveTransition, UIViewController
     
     public var transitionDuration:TimeInterval = 0.3
     
+    var preStatusBarStyle = UIApplication.shared.statusBarStyle
+    public var newStatusBarStyle = UIApplication.shared.statusBarStyle
+    
     public var presenting:Bool = true
     public var opened:Bool = false
     

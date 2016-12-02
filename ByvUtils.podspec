@@ -33,7 +33,7 @@ TODO: Add long description of the pod here.
   s.source_files = 'ByvUtils/Classes/**/*'
   
   s.resource_bundles = {
-    'ByvUtils' => ['ByvUtils/ByvUtils.bundle']
+    'ByvUtils' => ['Pod/Classes/**/*.png']
   }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
