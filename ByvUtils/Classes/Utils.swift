@@ -31,9 +31,7 @@ public struct Utils {
         if let _data = data {
             do {
                 if let anyObj = try JSONSerialization.jsonObject(with: _data) as? [String: Any] {
-                    if let json:[String: Any] = anyObj  {
-                        return json
-                    }
+                    return anyObj
                 }
             } catch {
                 print("json error: \(error.localizedDescription)")
@@ -46,9 +44,7 @@ public struct Utils {
         if let _data = data {
             do {
                 if let anyArray = try JSONSerialization.jsonObject(with: _data) as? Array<[String: Any]> {
-                    if let array:Array<[String: Any]> = anyArray  {
-                        return array
-                    }
+                    return anyArray
                 }
             } catch {
                 print("json error: \(error.localizedDescription)")

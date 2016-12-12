@@ -84,7 +84,7 @@ extension UIView {
     
     func add(subViews:Array<UIView>, direction:ByvDirection = .vertical, insets: UIEdgeInsets = UIEdgeInsets.zero, margin: CGFloat = 0.0, size: CGFloat? = nil) {
         
-        var preView: UIView? = nil
+        var preView: UIView?
         
         for view in subViews {
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +105,7 @@ extension UIView {
                 formatString = "H:"
             }
             
-            if let preView = preView {
+            if preView != nil {
                 formatString += "[preView]-(\(margin))-"
             } else {
                 formatString += "|-(\(insets.top))-"
