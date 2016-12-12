@@ -16,6 +16,8 @@ it, simply add the following line to your Podfile:
 
 ```ruby
 pod "ByvUtils"
+```
+
 ## Author
 
 Adrian Apodaca, adrian@byvapps.com
