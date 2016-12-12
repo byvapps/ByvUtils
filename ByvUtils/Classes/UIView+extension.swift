@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ByvPosition {
+public enum ByvPosition {
     case top
     case right
     case bottom
@@ -16,12 +16,12 @@ enum ByvPosition {
     case all
 }
 
-enum ByvDirection {
+public enum ByvDirection {
     case vertical
     case horizontal
 }
 
-extension UIView {
+public extension UIView {
     func addTo(_ superView: UIView, position:ByvPosition = .all, insets: UIEdgeInsets = UIEdgeInsets.zero, centered:Bool = false, width: CGFloat? = nil, height: CGFloat? = nil) {
         
         self.translatesAutoresizingMaskIntoConstraints = false
