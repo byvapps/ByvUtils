@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ByvUtils'
-  s.version          = '0.1.4'
+  s.version          = '1.0.0'
   s.summary          = 'Utils for B&V Apps.'
 
 # This description is used to generate tags and improve search results.
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
   s.description      = <<-DESC
-TODO: Add long description of the pod here.
+Help methods and extensions for iOS development
                        DESC
 
     s.homepage         = 'https://github.com/byvapps/ByvUtils'
@@ -28,15 +28,8 @@ TODO: Add long description of the pod here.
     s.source           = { :git => 'https://github.com/byvapps/ByvUtils.git', :tag => s.version.to_s }
     s.social_media_url = 'https://twitter.com/byvapps'
 
-  s.ios.deployment_target = '8.0'
+    s.ios.deployment_target = '8.0'
 
-  s.source_files = 'ByvUtils/Classes/**/*'
-  
-  s.resource_bundles = {
-    'ByvUtils' => ['Pod/Classes/**/*.png']
-  }
-
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
-  # s.dependency 'AFNetworking', '~> 2.3'
+    s.source_files = 'ByvUtils/Classes/**/*'
+    s.requires_arc = true
 end
