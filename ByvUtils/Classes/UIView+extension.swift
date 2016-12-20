@@ -131,26 +131,30 @@ public extension UIView {
         }
     }
     
-    func setHeight(_ height: CGFloat) {
+    func setHeight(_ height: CGFloat, relation:NSLayoutRelation = .equal) {
         if let hc = self.height() {
-            hc.constant = height
-        } else {
-            let heightConstraint = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
-            self.addConstraint(heightConstraint)
+            if hc.relation == relation {
+                hc.constant = height
+                return
+            }
         }
+        let heightConstraint = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.height, relatedBy: relation, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: height)
+        self.addConstraint(heightConstraint)
     }
     
     func height() -> NSLayoutConstraint? {
         return getConstraint(attribute: NSLayoutAttribute.height)
     }
     
-    func setWidth(_ width: CGFloat) {
+    func setWidth(_ width: CGFloat, relation:NSLayoutRelation = .equal) {
         if let wc = self.width() {
-            wc.constant = width
-        } else {
-            let widthConstraint = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: width)
-            self.addConstraint(widthConstraint)
+            if wc.relation == relation {
+                wc.constant = width
+                return
+            }
         }
+        let widthConstraint = NSLayoutConstraint(item: self, attribute: NSLayoutAttribute.width, relatedBy: relation, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: width)
+        self.addConstraint(widthConstraint)
     }
     
     func width() -> NSLayoutConstraint? {
@@ -172,5 +176,22 @@ public extension UIView {
         self.layer.shadowOpacity = opacity
         self.layer.shadowOffset = offset
         self.layer.shadowRadius = radius
+    }
+    
+    func indexPath(for tableView: UITableView) -> IndexPath? {
+        var view:UIView? = self
+        while (view != nil) {
+            if view!.isKind(of: UITableViewCell.classForCoder()) {
+                return tableView.indexPath(for: view as! UITableViewCell)
+            } else {
+                if let sv = view?.superview {
+                    view = sv
+                } else {
+                    view = nil
+                }
+            }
+        }
+        
+        return nil;
     }
 }
