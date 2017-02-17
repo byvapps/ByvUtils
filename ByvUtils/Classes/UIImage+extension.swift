@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension UIImage {
+public extension UIImage {
     
     /// Returns a image that fills in newSize
     func resizedImageToSize(_ newSize: CGSize) -> UIImage {

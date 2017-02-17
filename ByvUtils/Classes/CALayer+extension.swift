@@ -9,7 +9,7 @@
 import Foundation
 
 @IBDesignable
-extension CALayer {
+public extension CALayer {
     
     @IBInspectable
     public var borderIBColor:UIColor? {

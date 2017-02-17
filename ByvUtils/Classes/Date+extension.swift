@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Date {
+public extension Date {
     public static func fromMilliseconds(_ milliseconds: Int?) -> Date? {
         if let millis = milliseconds {
             return Date(timeIntervalSince1970: Double(millis/1000))
