@@ -16,6 +16,10 @@ public extension Date {
         return nil
     }
     
+    public static func fromMilliseconds(_ milliseconds: Int) -> Date {
+        return Date(timeIntervalSince1970: Double(milliseconds/1000))
+    }
+    
     public func milliseconds() -> Double {
         return self.timeIntervalSince1970 * 1000
     }
