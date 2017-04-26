@@ -8,6 +8,12 @@
 
 import Foundation
 
+public class PreHiddenData {
+    static public var assoKey: UInt8 = 0
+    var newConstraints:[NSLayoutConstraint] = []
+    var oldConstraints:[NSLayoutConstraint] = []
+}
+
 public enum ByvPosition {
     case top
     case right
@@ -21,7 +27,17 @@ public enum ByvDirection {
     case horizontal
 }
 
+
 public extension UIView {
+    
+    var preHiddenData: PreHiddenData {
+        get {
+            return associatedObject(base:self, key: &PreHiddenData.assoKey)
+            { return PreHiddenData() } // Set the initial value of the var
+        }
+        set { associateObject(base:self, key: &PreHiddenData.assoKey, value: newValue) }
+    }
+    
     func addTo(_ superView: UIView, position:ByvPosition = .all, insets: UIEdgeInsets = UIEdgeInsets.zero, centered:Bool = false, width: CGFloat? = nil, height: CGFloat? = nil) {
         
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -84,12 +100,15 @@ public extension UIView {
     
     func add(subViews:Array<UIView>, direction:ByvDirection = .vertical, insets: UIEdgeInsets = UIEdgeInsets.zero, margin: CGFloat = 0.0, size: CGFloat? = nil) {
         
-        var preView: UIView?
+        var preView: UIView? = nil
         
         for view in subViews {
             view.translatesAutoresizingMaskIntoConstraints = false
             self.addSubview(view)
-            let views = ["view" : view, "preView": preView]
+            var views = ["view" : view]
+            if let preView = preView {
+                views = ["view" : view, "preView": preView]
+            }
             var formatString = "H:"
             if direction == .horizontal {
                 formatString = "V:"
@@ -143,7 +162,7 @@ public extension UIView {
     }
     
     func height() -> NSLayoutConstraint? {
-        return getConstraint(attribute: NSLayoutAttribute.height)
+        return getConstraint(attribute: .height)
     }
     
     func setWidth(_ width: CGFloat, relation:NSLayoutRelation = .equal) {
@@ -158,16 +177,44 @@ public extension UIView {
     }
     
     func width() -> NSLayoutConstraint? {
-        return getConstraint(attribute: NSLayoutAttribute.width)
+        return getConstraint(attribute: .width)
     }
     
     private func getConstraint(attribute: NSLayoutAttribute) -> NSLayoutConstraint? {
-        for constraint in self.constraints {
-            if constraint.firstAttribute == attribute {
-                return constraint
+        var priority:Float = -1.0
+        var response:NSLayoutConstraint? = nil
+        
+        for constraint in getConstraints(attribute: attribute) {
+            if constraint.priority > priority {
+                priority = constraint.priority
+                response = constraint
             }
         }
-        return nil
+        
+        return response
+    }
+    
+    private func getConstraints(attribute: NSLayoutAttribute) -> [NSLayoutConstraint] {
+        var result:[NSLayoutConstraint] = []
+        if attribute == .width || attribute == .height {
+            for constraint in self.constraints {
+                if constraint.firstAttribute == attribute {
+                    result.append(constraint)
+                }
+            }
+        } else {
+            if let sv = self.superview {
+                for constraint in sv.constraints {
+                    if constraint.firstItem === self && constraint.firstAttribute == attribute {
+                        result.append(constraint)
+                    }
+                    if constraint.secondItem === self && constraint.secondAttribute == attribute {
+                        result.append(constraint)
+                    }
+                }
+            }
+        }
+        return result
     }
     
     func addShadow(color: UIColor = UIColor.black, opacity: Float = 0.8, offset: CGSize = CGSize.zero, radius: CGFloat = 10.0 ) {
@@ -193,5 +240,272 @@ public extension UIView {
         }
         
         return nil;
+    }
+    
+    func top() -> NSLayoutConstraint? {
+        return getConstraint(attribute: .top)
+    }
+    
+    func bottom() -> NSLayoutConstraint? {
+        return getConstraint(attribute: .bottom)
+    }
+    
+    func left() -> NSLayoutConstraint? {
+        return getConstraint(attribute: .leading)
+    }
+    
+    func rigth() -> NSLayoutConstraint? {
+        return getConstraint(attribute: .trailing)
+    }
+    
+    func hideInVertical(margin:Double, animated:Bool = false) {
+        if let top = self.top(), let bottom = self.bottom() {
+            var topItem = top.firstItem
+            if topItem === self, let item = top.secondItem {
+                topItem = item
+            }
+            var bottomItem = bottom.firstItem
+            if bottomItem === self, let item = bottom.secondItem {
+                bottomItem = item
+            }
+            
+            self.preHiddenData.oldConstraints = [top, bottom]
+            
+            superview?.removeConstraints(preHiddenData.oldConstraints)
+            
+            
+            let views = ["top": topItem, "bottom": bottomItem]
+            var formatString = "V:"
+            if topItem === superview {
+                formatString += "|-"
+            } else {
+                formatString += "[top]-"
+            }
+            formatString += "(\(margin))"
+            if bottomItem === superview {
+                formatString += "-|"
+            } else {
+                formatString += "-[bottom]"
+            }
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+            
+            self.preHiddenData.newConstraints = constraints
+            
+            NSLayoutConstraint.activate(constraints)
+        }
+        if (animated) {
+            UIView.animate(withDuration: 0.3) {
+                self.superview?.layoutIfNeeded()
+            }
+        }
+        self.isHidden = true
+    }
+    
+    func showInVertical(animated:Bool = false) {
+        superview?.removeConstraints(self.preHiddenData.newConstraints)
+        superview?.addConstraints(self.preHiddenData.oldConstraints)
+        self.preHiddenData = PreHiddenData()
+        if (animated) {
+            UIView.animate(withDuration: 0.3) {
+                self.superview?.layoutIfNeeded()
+            }
+        }
+        self.isHidden = false
+    }
+    
+    func removeInVertical(margin:Double) {
+        if let top = self.top(), let bottom = self.bottom() {
+            var topItem = top.firstItem
+            if topItem === self, let item = top.secondItem {
+                topItem = item
+            }
+            var bottomItem = bottom.firstItem
+            if bottomItem === self, let item = bottom.secondItem {
+                bottomItem = item
+            }
+            
+            let views = ["top": topItem, "bottom": bottomItem]
+            var formatString = "V:"
+            if topItem === superview {
+                formatString += "|-"
+            } else {
+                formatString += "[top]-"
+            }
+            formatString += "(\(margin))"
+            if bottomItem === superview {
+                formatString += "-|"
+            } else {
+                formatString += "-[bottom]"
+            }
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+            
+            self.removeFromSuperview()
+            
+            NSLayoutConstraint.activate(constraints)
+        }
+    }
+    
+    func insertVetical(in sv:UIView, top:UIView?, bottom:UIView?, insets:UIEdgeInsets) {
+        var topItem = sv
+        if let top = top {
+            topItem = top
+        }
+        var bottomItem = sv
+        if let bottom = bottom {
+            bottomItem = bottom
+        }
+        
+        if let const = top?.bottom() {
+            sv.removeConstraint(const)
+        }
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        sv.addSubview(self)
+        let views = ["top": topItem, "bottom": bottomItem, "view": self]
+        var formatString = "V:"
+        if topItem === sv {
+            formatString += "|-"
+        } else {
+            formatString += "[top]-"
+        }
+        formatString += "(\(insets.top))-[view]-(\(insets.bottom))"
+        if bottomItem === sv {
+            formatString += "-|"
+        } else {
+            formatString += "-[bottom]"
+        }
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
+        
+        formatString = "H:|-(\(insets.left))-[view]-(\(insets.right))-|"
+        constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
+    }
+    
+    func hideInHorizontal(margin:Double, animated:Bool = false) {
+        if let top = self.left(), let bottom = self.rigth() {
+            var topItem = top.firstItem
+            if topItem === self, let item = top.secondItem {
+                topItem = item
+            }
+            var bottomItem = bottom.firstItem
+            if bottomItem === self, let item = bottom.secondItem {
+                bottomItem = item
+            }
+            
+            self.preHiddenData.oldConstraints = [top, bottom]
+            
+            superview?.removeConstraints(preHiddenData.oldConstraints)
+            
+            let views = ["top": topItem, "bottom": bottomItem]
+            var formatString = "H:"
+            if topItem === superview {
+                formatString += "|-"
+            } else {
+                formatString += "[top]-"
+            }
+            formatString += "(\(margin))"
+            if bottomItem === superview {
+                formatString += "-|"
+            } else {
+                formatString += "-[bottom]"
+            }
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+            
+            self.preHiddenData.newConstraints = constraints
+            
+            NSLayoutConstraint.activate(constraints)
+        }
+        if (animated) {
+            UIView.animate(withDuration: 0.3) {
+                self.superview?.layoutIfNeeded()
+            }
+        }
+        self.isHidden = true
+    }
+    
+    func showInHorizontal(animated:Bool = false) {
+        superview?.removeConstraints(self.preHiddenData.newConstraints)
+        superview?.addConstraints(self.preHiddenData.oldConstraints)
+        self.preHiddenData = PreHiddenData()
+        if (animated) {
+            UIView.animate(withDuration: 0.3) {
+                self.superview?.layoutIfNeeded()
+            }
+        }
+        self.isHidden = false
+    }
+    
+    func removeInHorizontal(margin:Double) {
+        if let top = self.left(), let bottom = self.rigth() {
+            var topItem = top.firstItem
+            if topItem === self, let item = top.secondItem {
+                topItem = item
+            }
+            var bottomItem = bottom.firstItem
+            if bottomItem === self, let item = bottom.secondItem {
+                bottomItem = item
+            }
+            
+            let views = ["top": topItem, "bottom": bottomItem]
+            var formatString = "H:"
+            if topItem === superview {
+                formatString += "|-"
+            } else {
+                formatString += "[top]-"
+            }
+            formatString += "(\(margin))"
+            if bottomItem === superview {
+                formatString += "-|"
+            } else {
+                formatString += "-[bottom]"
+            }
+            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+            
+            self.removeFromSuperview()
+            
+            NSLayoutConstraint.activate(constraints)
+        }
+    }
+    
+    func insertHorizontal(in sv:UIView, left:UIView?, right:UIView?, insets:UIEdgeInsets) {
+        var topItem = sv
+        if let left = left {
+            topItem = left
+        }
+        var bottomItem = sv
+        if let right = right {
+            bottomItem = right
+        }
+        
+        if let const = left?.rigth() {
+            sv.removeConstraint(const)
+        }
+        
+        self.translatesAutoresizingMaskIntoConstraints = false
+        sv.addSubview(self)
+        let views = ["top": topItem, "bottom": bottomItem, "view": self]
+        var formatString = "H:"
+        if topItem === sv {
+            formatString += "|-"
+        } else {
+            formatString += "[top]-"
+        }
+        formatString += "(\(insets.top))-[view]-(\(insets.bottom))"
+        if bottomItem === sv {
+            formatString += "-|"
+        } else {
+            formatString += "-[bottom]"
+        }
+        var constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
+        
+        formatString = "V:|-(\(insets.left))-[view]-(\(insets.right))-|"
+        constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+        
+        NSLayoutConstraint.activate(constraints)
     }
 }

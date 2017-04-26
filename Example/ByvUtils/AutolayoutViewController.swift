@@ -12,9 +12,19 @@ import ByvUtils
 class AutolayoutViewController: UIViewController {
 
     @IBOutlet weak var scroll: UIScrollView!
+    @IBOutlet weak var removeBtn: UIButton!
+    
+    var viewToRemove: UIView = UIView()
+    var preViewToRemove: UIView? = nil
+    var postViewToRemove: UIView? = nil
+    var isVertical:Bool = true
+    var is2ndViewRemoved = false
+    
+    let indexToRemove = 2
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addvertical(nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,10 +32,12 @@ class AutolayoutViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func addHorizontal(_ sender: Any) {
+    @IBAction func addHorizontal(_ sender: Any?) {
         for view in scroll.subviews {
             view.removeFromSuperview()
         }
+        
+        isVertical = false
         
         var subViews: Array<UIView> = []
         for index in 1...10 {
@@ -36,15 +48,25 @@ class AutolayoutViewController: UIViewController {
             title.textAlignment = .center
             title.addTo(view, height: 235.0)
             subViews.append(view)
+            
+            if index == indexToRemove - 1 {
+                preViewToRemove = view
+            } else if index == indexToRemove {
+                viewToRemove = view
+            } else if index == indexToRemove + 1 {
+                postViewToRemove = view
+            }
         }
         
         scroll.add(subViews: subViews, direction: .horizontal, insets: UIEdgeInsetsMake(20, 20, 20, 20), margin: 10.0, size: 200.0)
     }
 
-    @IBAction func addvertical(_ sender: Any) {
+    @IBAction func addvertical(_ sender: Any?) {
         for view in scroll.subviews {
             view.removeFromSuperview()
         }
+        
+        isVertical = true
         
         var subViews: Array<UIView> = []
         for index in 1...10 {
@@ -55,11 +77,42 @@ class AutolayoutViewController: UIViewController {
             title.textAlignment = .center
             title.addTo(view, width: 335.0)
             subViews.append(view)
+            
+            if index == indexToRemove - 1 {
+                preViewToRemove = view
+            } else if index == indexToRemove {
+                viewToRemove = view
+            } else if index == indexToRemove + 1 {
+                postViewToRemove = view
+            }
         }
         
         scroll.add(subViews: subViews, direction: .vertical, insets: UIEdgeInsetsMake(20, 20, 20, 20), margin: 10.0, size: 200.0)
     }
     
+    @IBAction func change2ndView(_ sender: UIButton) {
+        if sender.titleLabel?.text == "Remove 2nd View" {
+            //Remove
+            sender.setTitle("Add 2nd View", for: .normal)
+            if isVertical {
+//                viewToRemove.hideInVertical(margin: 30, animated: true)
+                viewToRemove.removeInVertical(margin: 30)
+            } else {
+//                viewToRemove.hideInHorizontal(margin: 30, animated: true)
+                viewToRemove.removeInHorizontal(margin: 30)
+            }
+        } else {
+            //Add
+            sender.setTitle("Remove 2nd View", for: .normal)
+            if isVertical {
+//                viewToRemove.showInVertical(animated: true)
+                viewToRemove.insertVetical(in: scroll, top: preViewToRemove, bottom: postViewToRemove, insets: UIEdgeInsetsMake(10, 20, 10, 20))
+            } else {
+//                viewToRemove.showInHorizontal(animated: true)
+                viewToRemove.insertHorizontal(in: scroll, left: preViewToRemove, right: postViewToRemove, insets: UIEdgeInsetsMake(10, 20, 10, 20))
+            }
+        }
+    }
     
     /*
     // MARK: - Navigation
