@@ -47,4 +47,18 @@ public struct Utils {
         UserDefaults.standard.set([code], forKey: "AppleLanguages")
         UserDefaults.standard.synchronize()
     }
+    
+    public static func locale(currencyCode:String) -> Locale? {
+        for identifier in Locale.availableIdentifiers {
+            let locale = Locale(identifier: identifier)
+            if locale.currencyCode?.uppercased() == currencyCode.uppercased() {
+                return locale
+            }
+        }
+        return nil
+    }
+    
+    public static func currencySymbol(currencyCode:String) -> String? {
+        return Utils.locale(currencyCode: currencyCode)?.currencySymbol
+    }
 }

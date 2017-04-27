@@ -26,4 +26,8 @@ public extension UIViewController {
             present(viewControllerToPresent, animated: true, completion: nil)
         }
     }
+    
+    public func removeBackButtonText() {
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+    }
 }

@@ -27,7 +27,6 @@ public enum ByvDirection {
     case horizontal
 }
 
-
 public extension UIView {
     
     var preHiddenData: PreHiddenData {
@@ -38,7 +37,7 @@ public extension UIView {
         set { associateObject(base:self, key: &PreHiddenData.assoKey, value: newValue) }
     }
     
-    func addTo(_ superView: UIView, position:ByvPosition = .all, insets: UIEdgeInsets = UIEdgeInsets.zero, centered:Bool = false, width: CGFloat? = nil, height: CGFloat? = nil) {
+    public func addTo(_ superView: UIView, position:ByvPosition = .all, insets: UIEdgeInsets = UIEdgeInsets.zero, centered:Bool = false, width: CGFloat? = nil, height: CGFloat? = nil) {
         
         self.translatesAutoresizingMaskIntoConstraints = false
         superView.addSubview(self)
@@ -98,7 +97,7 @@ public extension UIView {
         
     }
     
-    func add(subViews:Array<UIView>, direction:ByvDirection = .vertical, insets: UIEdgeInsets = UIEdgeInsets.zero, margin: CGFloat = 0.0, size: CGFloat? = nil) {
+    public func add(subViews:Array<UIView>, direction:ByvDirection = .vertical, insets: UIEdgeInsets = UIEdgeInsets.zero, margin: CGFloat = 0.0, size: CGFloat? = nil) {
         
         var preView: UIView? = nil
         
@@ -150,7 +149,7 @@ public extension UIView {
         }
     }
     
-    func setHeight(_ height: CGFloat, relation:NSLayoutRelation = .equal) {
+    public func setHeight(_ height: CGFloat, relation:NSLayoutRelation = .equal) {
         if let hc = self.height() {
             if hc.relation == relation {
                 hc.constant = height
@@ -161,11 +160,11 @@ public extension UIView {
         self.addConstraint(heightConstraint)
     }
     
-    func height() -> NSLayoutConstraint? {
+    public func height() -> NSLayoutConstraint? {
         return getConstraint(attribute: .height)
     }
     
-    func setWidth(_ width: CGFloat, relation:NSLayoutRelation = .equal) {
+    public func setWidth(_ width: CGFloat, relation:NSLayoutRelation = .equal) {
         if let wc = self.width() {
             if wc.relation == relation {
                 wc.constant = width
@@ -176,7 +175,7 @@ public extension UIView {
         self.addConstraint(widthConstraint)
     }
     
-    func width() -> NSLayoutConstraint? {
+    public func width() -> NSLayoutConstraint? {
         return getConstraint(attribute: .width)
     }
     
@@ -217,7 +216,7 @@ public extension UIView {
         return result
     }
     
-    func addShadow(color: UIColor = UIColor.black, opacity: Float = 0.8, offset: CGSize = CGSize.zero, radius: CGFloat = 10.0 ) {
+    public func addShadow(color: UIColor = UIColor.black, opacity: Float = 0.8, offset: CGSize = CGSize.zero, radius: CGFloat = 10.0 ) {
         self.clipsToBounds = false
         self.layer.shadowColor = color.cgColor
         self.layer.shadowOpacity = opacity
@@ -225,40 +224,30 @@ public extension UIView {
         self.layer.shadowRadius = radius
     }
     
-    func indexPath(for tableView: UITableView) -> IndexPath? {
-        var view:UIView? = self
-        while (view != nil) {
-            if view!.isKind(of: UITableViewCell.classForCoder()) {
-                return tableView.indexPath(for: view as! UITableViewCell)
-            } else {
-                if let sv = view?.superview {
-                    view = sv
-                } else {
-                    view = nil
-                }
-            }
+    public func indexPath(for tableView: UITableView) -> IndexPath? {
+        if let cell = self.cellIn {
+            return tableView.indexPath(for: cell)
         }
-        
-        return nil;
+        return nil
     }
     
-    func top() -> NSLayoutConstraint? {
+    public func top() -> NSLayoutConstraint? {
         return getConstraint(attribute: .top)
     }
     
-    func bottom() -> NSLayoutConstraint? {
+    public func bottom() -> NSLayoutConstraint? {
         return getConstraint(attribute: .bottom)
     }
     
-    func left() -> NSLayoutConstraint? {
+    public func left() -> NSLayoutConstraint? {
         return getConstraint(attribute: .leading)
     }
     
-    func rigth() -> NSLayoutConstraint? {
+    public func rigth() -> NSLayoutConstraint? {
         return getConstraint(attribute: .trailing)
     }
     
-    func hideInVertical(margin:Double, animated:Bool = false) {
+    public func hideInVertical(margin:Double, animated:Bool = false) {
         if let top = self.top(), let bottom = self.bottom() {
             var topItem = top.firstItem
             if topItem === self, let item = top.secondItem {
@@ -301,7 +290,7 @@ public extension UIView {
         self.isHidden = true
     }
     
-    func showInVertical(animated:Bool = false) {
+    public func showInVertical(animated:Bool = false) {
         superview?.removeConstraints(self.preHiddenData.newConstraints)
         superview?.addConstraints(self.preHiddenData.oldConstraints)
         self.preHiddenData = PreHiddenData()
@@ -313,7 +302,7 @@ public extension UIView {
         self.isHidden = false
     }
     
-    func removeInVertical(margin:Double) {
+    public func removeInVertical(margin:Double) {
         if let top = self.top(), let bottom = self.bottom() {
             var topItem = top.firstItem
             if topItem === self, let item = top.secondItem {
@@ -345,7 +334,7 @@ public extension UIView {
         }
     }
     
-    func insertVetical(in sv:UIView, top:UIView?, bottom:UIView?, insets:UIEdgeInsets) {
+    public func insertVetical(in sv:UIView, top:UIView?, bottom:UIView?, insets:UIEdgeInsets) {
         var topItem = sv
         if let top = top {
             topItem = top
@@ -384,7 +373,7 @@ public extension UIView {
         NSLayoutConstraint.activate(constraints)
     }
     
-    func hideInHorizontal(margin:Double, animated:Bool = false) {
+    public func hideInHorizontal(margin:Double, animated:Bool = false) {
         if let top = self.left(), let bottom = self.rigth() {
             var topItem = top.firstItem
             if topItem === self, let item = top.secondItem {
@@ -426,7 +415,7 @@ public extension UIView {
         self.isHidden = true
     }
     
-    func showInHorizontal(animated:Bool = false) {
+    public func showInHorizontal(animated:Bool = false) {
         superview?.removeConstraints(self.preHiddenData.newConstraints)
         superview?.addConstraints(self.preHiddenData.oldConstraints)
         self.preHiddenData = PreHiddenData()
@@ -438,7 +427,7 @@ public extension UIView {
         self.isHidden = false
     }
     
-    func removeInHorizontal(margin:Double) {
+    public func removeInHorizontal(margin:Double) {
         if let top = self.left(), let bottom = self.rigth() {
             var topItem = top.firstItem
             if topItem === self, let item = top.secondItem {
@@ -470,7 +459,7 @@ public extension UIView {
         }
     }
     
-    func insertHorizontal(in sv:UIView, left:UIView?, right:UIView?, insets:UIEdgeInsets) {
+    public func insertHorizontal(in sv:UIView, left:UIView?, right:UIView?, insets:UIEdgeInsets) {
         var topItem = sv
         if let left = left {
             topItem = left
@@ -508,4 +497,90 @@ public extension UIView {
         
         NSLayoutConstraint.activate(constraints)
     }
+    
+    public static func cellIn(view: UIView) -> UITableViewCell? {
+        return view as? UITableViewCell ?? view.superview.flatMap(cellIn)
+    }
+    
+    public var cellIn:UITableViewCell? {
+        return UIView.cellIn(view: self)
+    }
+    
+    public static func navigationBarIn(view: UIView) -> UINavigationBar? {
+        return view as? UINavigationBar ?? view.superview.flatMap(navigationBarIn)
+    }
+    
+    public var navigationBarIn: UINavigationBar? {
+        return UIView.navigationBarIn(view: self)
+    }
 }
+
+
+// Animation
+
+public enum SlideTo {
+    case top
+    case bottom
+    case right
+    case left
+    
+    var key:String {
+        switch self {
+        case .top:
+            return "slideInFromBottomTransition"
+        case .bottom:
+            return "slideInFromTopTransition"
+        case .right:
+            return "slideInFromLeftTransition"
+        case .left:
+            return "slideInFromLeftTransition"
+        }
+    }
+    
+    var transitionSubType:String {
+        switch self {
+        case .top:
+            return kCATransitionFromTop
+        case .bottom:
+            return kCATransitionFromBottom
+        case .right:
+            return kCATransitionFromLeft
+        case .left:
+            return kCATransitionFromRight
+        }
+    }
+}
+
+public extension UIView {
+    
+    public func slide(to: SlideTo, duration: TimeInterval = 0.3, animationDelegate: CAAnimationDelegate? = nil) {
+        let slideInFromTransition = CATransition()
+        slideInFromTransition.delegate = animationDelegate
+        slideInFromTransition.type = kCATransitionPush
+        slideInFromTransition.duration = duration
+        slideInFromTransition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        slideInFromTransition.fillMode = kCAFillModeRemoved
+        slideInFromTransition.subtype = to.transitionSubType
+        
+        self.layer.add(slideInFromTransition, forKey: to.key)
+    }
+    
+    public func slideToTop() {
+        self.slide(to: .top)
+    }
+    
+    public func slideToBottom() {
+        self.slide(to: .bottom)
+    }
+    
+    public func slideToRight() {
+        self.slide(to: .right)
+    }
+    
+    public func slideToLeft() {
+        self.slide(to: .left)
+    }
+    
+}
+
+
