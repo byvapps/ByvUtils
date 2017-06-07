@@ -102,9 +102,13 @@ public extension UINavigationController {
             self.navigationBar.backgroundColor = preNavData.color
             self.navigationBar.setBackgroundImage(preNavData.image, for: .default)
             self.navigationBar.shadowImage = preNavData.shadowImage
-            self.navigationBar.isTranslucent = preNavData.trans
             self.navigationBar.tintColor = preNavData.tint
             self.navigationBar.barStyle = preNavData.barStyle
+            if alpha == 1.0 {
+                self.navigationBar.isTranslucent = preNavData.trans
+            } else {
+                self.navigationBar.isTranslucent = true
+            }
         } else {
             self.navigationBar.tintColor = UIColor.white
             self.navigationBar.barStyle = .black
