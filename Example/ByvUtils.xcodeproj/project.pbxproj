@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		3A4282CE1EB127D200188374 /* SearchBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4282CD1EB127D200188374 /* SearchBarViewController.swift */; };
 		3A4282D21EB23C1100188374 /* AnimationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A4282D11EB23C1100188374 /* AnimationsViewController.swift */; };
+		3A560A841EC1AEAF0066DCA0 /* HiddenNavViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A560A831EC1AEAF0066DCA0 /* HiddenNavViewController.swift */; };
+		3A560A861EC20A0D0066DCA0 /* landscape-403165__340.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3A560A851EC20A0D0066DCA0 /* landscape-403165__340.jpg */; };
+		3A560A881EC20D5F0066DCA0 /* Share-image-bg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 3A560A871EC20D5F0066DCA0 /* Share-image-bg.jpg */; };
 		3AC9F3FD1DFECB5200BEA72E /* AutolayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AC9F3FC1DFECB5200BEA72E /* AutolayoutViewController.swift */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
@@ -35,6 +38,9 @@
 		2B42497A3B5AF1FCD195C117 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		3A4282CD1EB127D200188374 /* SearchBarViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBarViewController.swift; sourceTree = "<group>"; };
 		3A4282D11EB23C1100188374 /* AnimationsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnimationsViewController.swift; sourceTree = "<group>"; };
+		3A560A831EC1AEAF0066DCA0 /* HiddenNavViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HiddenNavViewController.swift; sourceTree = "<group>"; };
+		3A560A851EC20A0D0066DCA0 /* landscape-403165__340.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "landscape-403165__340.jpg"; sourceTree = "<group>"; };
+		3A560A871EC20D5F0066DCA0 /* Share-image-bg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "Share-image-bg.jpg"; sourceTree = "<group>"; };
 		3AC9F3FC1DFECB5200BEA72E /* AutolayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutolayoutViewController.swift; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* ByvUtils_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ByvUtils_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -115,6 +121,9 @@
 				3AC9F3FC1DFECB5200BEA72E /* AutolayoutViewController.swift */,
 				3A4282CD1EB127D200188374 /* SearchBarViewController.swift */,
 				3A4282D11EB23C1100188374 /* AnimationsViewController.swift */,
+				3A560A831EC1AEAF0066DCA0 /* HiddenNavViewController.swift */,
+				3A560A851EC20A0D0066DCA0 /* landscape-403165__340.jpg */,
+				3A560A871EC20D5F0066DCA0 /* Share-image-bg.jpg */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -259,6 +268,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A560A861EC20A0D0066DCA0 /* landscape-403165__340.jpg in Resources */,
+				3A560A881EC20D5F0066DCA0 /* Share-image-bg.jpg in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
@@ -372,6 +383,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A560A841EC1AEAF0066DCA0 /* HiddenNavViewController.swift in Sources */,
 				3AC9F3FD1DFECB5200BEA72E /* AutolayoutViewController.swift in Sources */,
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				3A4282CE1EB127D200188374 /* SearchBarViewController.swift in Sources */,

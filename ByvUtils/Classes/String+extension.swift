@@ -10,11 +10,6 @@ import Foundation
 
 public extension String {
     
-    // MARK: - Localization
-    var localized: String {
-        return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
-    }
-    
     // MARK: - length
     
     var length: Int {
@@ -135,6 +130,16 @@ public extension String {
             }
         }
         return false
+    }
+    
+    func uppercaseFirstLetter() -> String {
+        let first = String(characters.prefix(1)).capitalized
+        let other = String(characters.dropFirst())
+        return first + other
+    }
+    
+    mutating func uppercaseFirstLetter() {
+        self = self.uppercaseFirstLetter()
     }
 }
 
