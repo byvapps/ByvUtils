@@ -59,12 +59,13 @@ public extension UINavigationController {
         
         pre.gradient.frame = frame
         pre.gradient.colors = [UIColor(white: 0, alpha: 0.3).cgColor,
-                           UIColor(white: 0, alpha: 0.0).cgColor]
+                               UIColor(white: 0, alpha: 0.0).cgColor]
         
         pre.gradientView.frame = frame
         pre.gradientView.backgroundColor = UIColor.clear
         pre.gradientView.layer.insertSublayer(pre.gradient, at: 0)
         self.navigationBar.addSubview(pre.gradientView)
+        pre.gradientView.isUserInteractionEnabled = false
         self.navigationBar.sendSubview(toBack: pre.gradientView)
         
         self.preNavData = pre

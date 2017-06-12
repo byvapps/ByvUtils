@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pEF-vO-crT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="pEF-vO-crT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
@@ -167,6 +167,14 @@
                                     <action selector="change2ndView:" destination="2jh-xg-4Y7" eventType="touchUpInside" id="eRk-rL-yi1"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uhW-di-HSD">
+                                <rect key="frame" x="16" y="72" width="50" height="50"/>
+                                <color key="backgroundColor" red="0.35686274509999999" green="0.58039215690000001" blue="0.3803921569" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="fXo-f7-hWK"/>
+                                    <constraint firstAttribute="height" constant="50" id="gFL-mh-u5E"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -179,12 +187,15 @@
                             <constraint firstAttribute="trailing" secondItem="MEb-ez-rXA" secondAttribute="trailing" id="dbK-R1-73f"/>
                             <constraint firstItem="mPA-mV-S4P" firstAttribute="centerX" secondItem="act-5V-n0K" secondAttribute="centerX" id="dy1-nQ-IkF"/>
                             <constraint firstItem="od3-vx-ZpQ" firstAttribute="leading" secondItem="act-5V-n0K" secondAttribute="leading" id="eKv-cn-0R8"/>
+                            <constraint firstItem="uhW-di-HSD" firstAttribute="top" secondItem="KaM-mc-ECE" secondAttribute="bottom" constant="8" id="ecF-rm-kvX"/>
                             <constraint firstItem="yA1-wK-qK4" firstAttribute="top" secondItem="mPA-mV-S4P" secondAttribute="bottom" constant="37" id="qQK-2e-xly"/>
                             <constraint firstItem="MEb-ez-rXA" firstAttribute="top" secondItem="mPA-mV-S4P" secondAttribute="bottom" constant="37" id="rMi-zR-xuy"/>
+                            <constraint firstItem="uhW-di-HSD" firstAttribute="leading" secondItem="act-5V-n0K" secondAttribute="leading" constant="16" id="xHb-lH-6j0"/>
                             <constraint firstItem="MEb-ez-rXA" firstAttribute="width" secondItem="act-5V-n0K" secondAttribute="width" multiplier="0.5" id="z2S-og-EwN"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="green" destination="uhW-di-HSD" id="mjh-xo-6ac"/>
                         <outlet property="removeBtn" destination="bPf-eh-fsU" id="RPo-1X-bda"/>
                         <outlet property="scroll" destination="od3-vx-ZpQ" id="pVi-my-tvo"/>
                     </connections>

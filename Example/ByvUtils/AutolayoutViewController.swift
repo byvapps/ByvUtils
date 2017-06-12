@@ -13,6 +13,7 @@ class AutolayoutViewController: UIViewController {
 
     @IBOutlet weak var scroll: UIScrollView!
     @IBOutlet weak var removeBtn: UIButton!
+    @IBOutlet weak var green: UIView!
     
     var viewToRemove: UIView = UIView()
     var preViewToRemove: UIView? = nil
@@ -25,6 +26,9 @@ class AutolayoutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         addvertical(nil)
+        
+        green.removeFromSuperview()
+        green.addTo(self.view, position: .topRight, insets:UIEdgeInsetsMake(75, 16, 16, 16), width: 50, height: 50)
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,6 +37,7 @@ class AutolayoutViewController: UIViewController {
     }
     
     @IBAction func addHorizontal(_ sender: Any?) {
+        
         for view in scroll.subviews {
             view.removeFromSuperview()
         }

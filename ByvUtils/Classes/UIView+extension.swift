@@ -16,9 +16,13 @@ public class PreHiddenData {
 
 public enum ByvPosition {
     case top
+    case topRight
     case right
+    case bottomRight
     case bottom
+    case bottomLeft
     case left
+    case topLeft
     case all
 }
 
@@ -45,7 +49,7 @@ public extension UIView {
         
         var formatString = "H:"
         
-        if position == .left || ((position == .top || position == .bottom || position == .all) && !centered) {
+        if (position == .left || position == .topLeft || position == .bottomLeft) || ((position == .top || position == .bottom || position == .all) && !centered) {
             formatString += "|-(\(insets.left))-"
         }
         
@@ -57,7 +61,7 @@ public extension UIView {
         
         formatString += "]"
         
-        if position == .right || ((position == .top || position == .bottom || position == .all) && !centered) {
+        if (position == .right || position == .topRight || position == .bottomRight) || ((position == .top || position == .bottom || position == .all) && !centered) {
             formatString += "-(\(insets.right))-|"
         }
         
@@ -71,7 +75,7 @@ public extension UIView {
         
         formatString = "V:"
         
-        if position == .top || ((position == .left || position == .right || position == .all) && !centered) {
+        if (position == .top || position == .topRight || position == .topLeft) || ((position == .left || position == .right || position == .all) && !centered) {
             formatString += "|-(\(insets.top))-"
         }
         
@@ -83,7 +87,7 @@ public extension UIView {
         
         formatString += "]"
         
-        if position == .bottom || ((position == .left || position == .right || position == .all) && !centered) {
+        if (position == .bottom || position == .bottomRight || position == .bottomLeft) || ((position == .left || position == .right || position == .all) && !centered) {
             formatString += "-(\(insets.bottom))-|"
         }
         
