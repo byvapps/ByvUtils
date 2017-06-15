@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ByvUtils'
-  s.version          = '1.0.12'
+  s.version          = '1.0.13'
   s.summary          = 'Utils for B&V Apps.'
 
 # This description is used to generate tags and improve search results.

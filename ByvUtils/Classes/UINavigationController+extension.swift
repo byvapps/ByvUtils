@@ -77,7 +77,6 @@ public extension UINavigationController {
     
     public func resetFromAlphaUpdates() {
         NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
-        
         self.navigationBar.backgroundColor = preNavData.color
         self.navigationBar.setBackgroundImage(preNavData.image, for: .default)
         self.navigationBar.shadowImage = preNavData.shadowImage
@@ -100,16 +99,10 @@ public extension UINavigationController {
         }
         
         if alpha > 0.0 {
-            self.navigationBar.backgroundColor = preNavData.color
             self.navigationBar.setBackgroundImage(preNavData.image, for: .default)
             self.navigationBar.shadowImage = preNavData.shadowImage
             self.navigationBar.tintColor = preNavData.tint
             self.navigationBar.barStyle = preNavData.barStyle
-            if alpha == 1.0 {
-                self.navigationBar.isTranslucent = preNavData.trans
-            } else {
-                self.navigationBar.isTranslucent = true
-            }
         } else {
             self.navigationBar.tintColor = UIColor.white
             self.navigationBar.barStyle = .black
@@ -118,9 +111,9 @@ public extension UINavigationController {
             self.navigationBar.isTranslucent = true
         }
         preNavData.currentAlpha = alpha
-        
         preNavData.gradientView.alpha = 1 - preNavData.currentAlpha
-        self.navigationBar.setBackgroundImage(preNavData.navColor.withAlphaComponent(preNavData.currentAlpha).asImage(self.navigationBar.bounds.size), for: .default)
+        
+        updateBakImageAlpha()
     }
     
     func rotated() {
@@ -131,7 +124,28 @@ public extension UINavigationController {
         }
         preNavData.gradient.frame = frame
         preNavData.gradientView.frame = frame
-        self.navigationBar.setBackgroundImage(preNavData.navColor.withAlphaComponent(preNavData.currentAlpha).asImage(self.navigationBar.bounds.size), for: .default)
+        updateBakImageAlpha()
+    }
+    
+    func updateBakImageAlpha() {
+        if preNavData.currentAlpha == 1.0 {
+            self.navigationBar.isTranslucent = preNavData.trans
+            self.navigationBar.backgroundColor = preNavData.color
+        } else {
+            self.navigationBar.isTranslucent = true
+            var finalAlpha = preNavData.currentAlpha
+            if preNavData.trans {
+                finalAlpha -= 0.025
+            }
+            if let img = preNavData.image {
+                self.navigationBar.setBackgroundImage(img.alpha(preNavData.currentAlpha), for: .default)
+            } else {
+                self.navigationBar.setBackgroundImage(preNavData.navColor.withAlphaComponent(finalAlpha).asImage(self.navigationBar.bounds.size), for: .default)
+            }
+            if let color = preNavData.color {
+                self.navigationBar.backgroundColor = color.withAlphaComponent(finalAlpha)
+            }
+        }
     }
     
 }
@@ -163,6 +177,16 @@ public extension UIImage {
         
         guard let cgImage = image?.cgImage else { return nil }
         self.init(cgImage: cgImage)
+    }
+    
+    func alpha(_ value:CGFloat)->UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+        
     }
 }
 
