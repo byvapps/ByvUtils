@@ -42,7 +42,7 @@ public extension UIViewController {
     
     public func presentFromVisibleViewController(_ viewControllerToPresent: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
         if let presentVc = UIViewController.topViewController(from:self) {
-            presentVc.presentFromVisibleViewController(viewControllerToPresent, animated: flag, completion: completion)
+            presentVc.present(viewControllerToPresent, animated: flag, completion: completion)
         }
     }
     
