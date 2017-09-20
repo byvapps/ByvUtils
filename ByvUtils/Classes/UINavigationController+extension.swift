@@ -116,7 +116,7 @@ public extension UINavigationController {
         updateBakImageAlpha()
     }
     
-    func rotated() {
+    @objc func rotated() {
         var frame = self.navigationBar.bounds
         if !UIApplication.shared.isStatusBarHidden {
             frame.size.height += UIApplication.shared.statusBarFrame.height

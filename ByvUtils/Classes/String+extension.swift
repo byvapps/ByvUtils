@@ -66,7 +66,7 @@ public extension String {
     
     func QRImage(_ scale: CGFloat) -> UIImage? {
         let transform = CGAffineTransform(scaleX: scale, y: scale)
-        if let img = self.QRCIImage()?.applying(transform) {
+        if let img = self.QRCIImage()?.transformed(by: transform) {
             return UIImage(ciImage: img)
         }
         return nil

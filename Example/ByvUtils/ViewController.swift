@@ -58,33 +58,33 @@ class ExampleViewController: UIViewController {
         var str: Any? = nil
         
         if String.isEmpty(str) {
-            print("\"\(str)\" is empty string")
+            print("\"\(String(describing: str))\" is empty string")
         } else {
-            print("\"\(str)\" is NOT empty string")
+            print("\"\(String(describing: str))\" is NOT empty string")
         }
         
         str = ""
         
         if String.isEmpty(str) {
-            print("\"\(str)\" is empty string")
+            print("\"\(String(describing: str))\" is empty string")
         } else {
-            print("\"\(str)\" is NOT empty string")
+            print("\"\(String(describing: str))\" is NOT empty string")
         }
         
         str = "      "
         
         if String.isEmpty(str) {
-            print("\"\(str)\" is empty string")
+            print("\"\(String(describing: str))\" is empty string")
         } else {
-            print("\"\(str)\" is NOT empty string")
+            print("\"\(String(describing: str))\" is NOT empty string")
         }
         
         str = "Hello"
         
         if String.isEmpty(str) {
-            print("\"\(str)\" is empty string")
+            print("\"\(String(describing: str))\" is empty string")
         } else {
-            print("\"\(str)\" is NOT empty string")
+            print("\"\(String(describing: str))\" is NOT empty string")
         }
         
         // Email

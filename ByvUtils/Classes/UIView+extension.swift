@@ -188,8 +188,8 @@ public extension UIView {
         var response:NSLayoutConstraint? = nil
         
         for constraint in getConstraints(attribute: attribute) {
-            if constraint.priority > priority {
-                priority = constraint.priority
+            if constraint.priority.rawValue > priority {
+                priority = constraint.priority.rawValue
                 response = constraint
             }
         }
@@ -266,25 +266,26 @@ public extension UIView {
             
             superview?.removeConstraints(preHiddenData.oldConstraints)
             
-            
-            let views = ["top": topItem, "bottom": bottomItem]
-            var formatString = "V:"
-            if topItem === superview {
-                formatString += "|-"
-            } else {
-                formatString += "[top]-"
+            if let topItem = topItem, let bottomItem = bottomItem {
+                let views = ["top": topItem, "bottom": bottomItem]
+                var formatString = "V:"
+                if topItem === superview {
+                    formatString += "|-"
+                } else {
+                    formatString += "[top]-"
+                }
+                formatString += "(\(margin))"
+                if bottomItem === superview {
+                    formatString += "-|"
+                } else {
+                    formatString += "-[bottom]"
+                }
+                let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+                
+                self.preHiddenData.newConstraints = constraints
+                
+                NSLayoutConstraint.activate(constraints)
             }
-            formatString += "(\(margin))"
-            if bottomItem === superview {
-                formatString += "-|"
-            } else {
-                formatString += "-[bottom]"
-            }
-            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
-            
-            self.preHiddenData.newConstraints = constraints
-            
-            NSLayoutConstraint.activate(constraints)
         }
         if (animated) {
             UIView.animate(withDuration: 0.3) {
@@ -316,25 +317,26 @@ public extension UIView {
             if bottomItem === self, let item = bottom.secondItem {
                 bottomItem = item
             }
-            
-            let views = ["top": topItem, "bottom": bottomItem]
-            var formatString = "V:"
-            if topItem === superview {
-                formatString += "|-"
-            } else {
-                formatString += "[top]-"
+            if let topItem = topItem, let bottomItem = bottomItem {
+                let views = ["top": topItem, "bottom": bottomItem]
+                var formatString = "V:"
+                if topItem === superview {
+                    formatString += "|-"
+                } else {
+                    formatString += "[top]-"
+                }
+                formatString += "(\(margin))"
+                if bottomItem === superview {
+                    formatString += "-|"
+                } else {
+                    formatString += "-[bottom]"
+                }
+                let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+                
+                self.removeFromSuperview()
+                
+                NSLayoutConstraint.activate(constraints)
             }
-            formatString += "(\(margin))"
-            if bottomItem === superview {
-                formatString += "-|"
-            } else {
-                formatString += "-[bottom]"
-            }
-            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
-            
-            self.removeFromSuperview()
-            
-            NSLayoutConstraint.activate(constraints)
         }
     }
     
@@ -392,24 +394,26 @@ public extension UIView {
             
             superview?.removeConstraints(preHiddenData.oldConstraints)
             
-            let views = ["top": topItem, "bottom": bottomItem]
-            var formatString = "H:"
-            if topItem === superview {
-                formatString += "|-"
-            } else {
-                formatString += "[top]-"
+            if let topItem = topItem, let bottomItem = bottomItem {
+                let views = ["top": topItem, "bottom": bottomItem]
+                var formatString = "H:"
+                if topItem === superview {
+                    formatString += "|-"
+                } else {
+                    formatString += "[top]-"
+                }
+                formatString += "(\(margin))"
+                if bottomItem === superview {
+                    formatString += "-|"
+                } else {
+                    formatString += "-[bottom]"
+                }
+                let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+                
+                self.preHiddenData.newConstraints = constraints
+                
+                NSLayoutConstraint.activate(constraints)
             }
-            formatString += "(\(margin))"
-            if bottomItem === superview {
-                formatString += "-|"
-            } else {
-                formatString += "-[bottom]"
-            }
-            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
-            
-            self.preHiddenData.newConstraints = constraints
-            
-            NSLayoutConstraint.activate(constraints)
         }
         if (animated) {
             UIView.animate(withDuration: 0.3) {
@@ -442,24 +446,26 @@ public extension UIView {
                 bottomItem = item
             }
             
-            let views = ["top": topItem, "bottom": bottomItem]
-            var formatString = "H:"
-            if topItem === superview {
-                formatString += "|-"
-            } else {
-                formatString += "[top]-"
+            if let topItem = topItem, let bottomItem = bottomItem {
+                let views = ["top": topItem, "bottom": bottomItem]
+                var formatString = "H:"
+                if topItem === superview {
+                    formatString += "|-"
+                } else {
+                    formatString += "[top]-"
+                }
+                formatString += "(\(margin))"
+                if bottomItem === superview {
+                    formatString += "-|"
+                } else {
+                    formatString += "-[bottom]"
+                }
+                let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
+                
+                self.removeFromSuperview()
+                
+                NSLayoutConstraint.activate(constraints)
             }
-            formatString += "(\(margin))"
-            if bottomItem === superview {
-                formatString += "-|"
-            } else {
-                formatString += "-[bottom]"
-            }
-            let constraints = NSLayoutConstraint.constraints(withVisualFormat: formatString, options:[] , metrics: nil, views: views)
-            
-            self.removeFromSuperview()
-            
-            NSLayoutConstraint.activate(constraints)
         }
     }
     
