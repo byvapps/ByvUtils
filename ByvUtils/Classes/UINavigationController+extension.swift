@@ -52,16 +52,21 @@ public extension UINavigationController {
         pre.loaded = true
         
         var frame = self.navigationBar.bounds
+        if #available(iOS 11.0, *) {
+            print("safeAreaInsets: \(self.view.safeAreaInsets)")
+        } else {
+            // Fallback on earlier versions
+        }
         if !UIApplication.shared.isStatusBarHidden {
             frame.origin.y -= UIApplication.shared.statusBarFrame.height
             frame.size.height += UIApplication.shared.statusBarFrame.height
         }
+        pre.gradientView.frame = frame
         
-        pre.gradient.frame = frame
-        pre.gradient.colors = [UIColor(white: 0, alpha: 0.3).cgColor,
+        pre.gradient.frame = pre.gradientView.bounds
+        pre.gradient.colors = [UIColor(white: 0, alpha: 0.4).cgColor,
                                UIColor(white: 0, alpha: 0.0).cgColor]
         
-        pre.gradientView.frame = frame
         pre.gradientView.backgroundColor = UIColor.clear
         pre.gradientView.layer.insertSublayer(pre.gradient, at: 0)
         self.navigationBar.addSubview(pre.gradientView)
@@ -199,3 +204,4 @@ public extension CALayer {
         return response
     }
 }
+
