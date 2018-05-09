@@ -15,21 +15,8 @@ public extension UIAlertController {
     }
     
     func present(_ animated: Bool, completion: (() -> Void)?) {
-        if let rootVC = UIApplication.shared.keyWindow?.rootViewController {
-            presentFromController(rootVC, animated: animated, completion: completion)
-        }
-    }
-    
-    fileprivate func presentFromController(_ controller: UIViewController, animated: Bool, completion: (() -> Void)?) {
-        if let navVC = controller as? UINavigationController,
-            let visibleVC = navVC.visibleViewController {
-            presentFromController(visibleVC, animated: animated, completion: completion)
-        } else
-            if let tabVC = controller as? UITabBarController,
-                let selectedVC = tabVC.selectedViewController {
-                presentFromController(selectedVC, animated: animated, completion: completion)
-            } else {
-                controller.present(self, animated: animated, completion: completion);
+        if let vc = UIViewController.top {
+            vc.present(self, animated: animated, completion: completion)
         }
     }
     

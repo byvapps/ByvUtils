@@ -61,4 +61,12 @@ public struct Utils {
     public static func currencySymbol(currencyCode:String) -> String? {
         return Utils.locale(currencyCode: currencyCode)?.currencySymbol
     }
+    
+    public static func hideBackButtonsTexts() {
+        let attributes: [NSAttributedStringKey: Any] = [
+            NSAttributedStringKey.font: UIFont.systemFont(ofSize: 0.1),
+            NSAttributedStringKey.foregroundColor: UIColor.clear]
+        UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes(attributes, for: .highlighted)
+    }
 }

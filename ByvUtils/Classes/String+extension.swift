@@ -10,6 +10,15 @@ import Foundation
 
 public extension String {
     
+    // Date: iso8601
+    public var date: Date? {
+        get {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            return formatter.date(from: self)
+        }
+    }
+    
     // MARK: - length
     
     var length: Int {

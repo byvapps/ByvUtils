@@ -27,4 +27,13 @@ public extension Date {
     public func milliseconds() -> Double {
         return self.timeIntervalSince1970 * 1000
     }
+    
+    // Date: iso8601
+    public var string: String {
+        get {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+            return formatter.string(from: self)
+        }
+    }
 }

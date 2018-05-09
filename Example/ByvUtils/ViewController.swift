@@ -23,6 +23,10 @@ class ExampleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.title = "Big long title text"
+        
+        textField.textColor = UIColor(hex: "#00FF00")
+        
         // length
         
         print("versions:\n")

@@ -29,6 +29,8 @@ class AutolayoutViewController: UIViewController {
         
         green.removeFromSuperview()
         green.addTo(self.view, position: .topRight, insets:UIEdgeInsetsMake(75, 16, 16, 16), width: 50, height: 50)
+        
+        self.title = "Autolayout"
     }
 
     override func didReceiveMemoryWarning() {

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'ByvUtils'
-  s.version          = '1.1.1'
+  s.version          = '1.1.2'
   s.summary          = 'Utils for B&V Apps.'
 
 # This description is used to generate tags and improve search results.
@@ -29,6 +29,7 @@ Help methods and extensions for iOS development
     s.social_media_url = 'https://twitter.com/byvapps'
 
     s.ios.deployment_target = '8.0'
+    s.swift_version = '4.0'
     s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.0' }
 
     s.source_files = 'ByvUtils/Classes/**/*'

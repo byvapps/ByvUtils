@@ -47,6 +47,11 @@ public extension UIViewController {
     }
     
     public func removeBackButtonText() {
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+        var button = self.navigationItem.backBarButtonItem
+        if button == nil {
+            button = UIBarButtonItem(title: " ", style: .plain, target: nil, action: nil)
+        }
+        button?.title = " "
+        self.navigationItem.backBarButtonItem = button
     }
 }

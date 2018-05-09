@@ -38,4 +38,12 @@ public extension CALayer {
             return color
         }
     }
+    
+    public func asImage() -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(self.frame.size, false, 0.0)
+        self.render(in: UIGraphicsGetCurrentContext()!)
+        let response = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return response
+    }
 }
